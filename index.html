@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Video Fetcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-top: 2rem;
+        }
+
+        button {
+            font-size: 1.25rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 2rem;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .video-iframe {
+            width: 640px;
+            height: 360px;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Video Fetcher</h1>
+    <button id="fetchVideo">Fetch Random Video</button>
+    <p>This site is under construction.</p>
+    <p><i><b>Adding an annonymous apiKey is needed and also,</p>
+    <p>changing css into fancier and gaming like design should be done.</i></b></p>
+    <div id="videoEmbed">Your video will appear here...</div>
+    <script>
+        // Replace with your own API key
+        const apiKey = 'your key';
+
+        // Randomize search query
+        const queries=["cats","dogs","travel","technology","music","food","nature","sports","gaming","science","history","art","photography","health","fitness","yoga","news","business","education","programming","fashion","beauty","diy","parenting","movies","books","comedy","dancing","celebrities","wildlife","animation","architecture","automotive","cycling","gardening","hiking","meditation","outdoors","painting","philosophy","politics","psychology","relationships","religion","space","sustainability","travel vlogs","vegan","virtual reality","writing"];
+
+        const randomQuery = queries[Math.floor(Math.random() * queries.length)];
+
+        // YouTube Data API URL
+        const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${randomQuery}&type=video&key=${apiKey}`;
+
+        // Fetch random video link from YouTube
+        async function fetchRandomVideo() {
+            try {
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const videos = data.items;
+                const randomIndex = Math.floor(Math.random() * videos.length);
+                const randomVideoId = videos[randomIndex].id.videoId;
+
+                const videoEmbedElement = document.getElementById('videoEmbed');
+                videoEmbedElement.innerHTML = `<iframe class="video-iframe" src="https://www.youtube.com/embed/${randomVideoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            } catch (error) {
+                console.error('Error fetching random video link:', error);
+            }
+        }
+
+        document.getElementById('fetchVideo').addEventListener('click', fetchRandomVideo);
+    </script>
+  </body>
+</html>
